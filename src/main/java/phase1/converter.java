@@ -23,22 +23,38 @@ public class converter {
 				String delim = ";";
 				String motifs = "";
 				try {
+					if (!ligne.contains(";")) {
+						int pos = tabConv.indexOf(ligne);
+						if (pos == -1) {
+							pos = tabConv.size();
+							tabConv.add(ligne);
+						}
+						motifs = pos + " ";
+						bw.write(motifs);
+						bw.newLine();
+						continue;
+					}
+
 					String[] mot = ligne.split(delim);
 					for (int i = 0; i < mot.length; i++) {
+
 						int pos = tabConv.indexOf(mot[i]);
-						// mot pas encore dedans
+
+						// mot pas encor dans
 						if (pos == -1) {
 							pos = tabConv.size();
 							tabConv.add(mot[i]);
 						}
 						motifs += pos + " ";
+
 					}
+
 				} catch (java.lang.NullPointerException e) {
 					System.out.println("fin de conversion");
 				}
-
 				bw.write(motifs);
 				bw.newLine();
+
 			}
 		} catch (java.lang.NullPointerException ex) {
 			System.out.println("plus de ligne");
@@ -47,7 +63,7 @@ public class converter {
 			bw.close();
 		}
 
-	} // convertToTxt
+	}
 
 	public void convertToCsv(String txt, String csv) throws IOException {
 		FileReader fr = new FileReader(txt);
@@ -55,8 +71,12 @@ public class converter {
 		BufferedWriter bw = new BufferedWriter(new FileWriter(csv, true));
 		try {
 			String prem = br.readLine();
-			char nbligne = prem.charAt(1);
-			System.out.println(nbligne);
+			String Nbligne="";
+			for (int k = 1; k < prem.length() - 1; k++) {
+				Nbligne += prem.charAt(k);
+
+			}
+			System.out.println(Nbligne);
 			while (true) {
 
 				String ligne = br.readLine();
@@ -64,22 +84,40 @@ public class converter {
 				String motifs = "";
 				try {
 					String[] mot = ligne.split(delim);
-					String num = mot[mot.length - 1];
-					String freqmot = num + "/" + nbligne;
-					System.out.println(freqmot);
-					for (int i = 0; i < mot.length - 1; i++) {
 
+					int taille = mot.length;
+					String num = "";
+					if (taille > 1) {
+						num = mot[mot.length - 1];
+						String numerateur = "";
+						if (num.charAt(0) == '(') {
+							taille = mot.length - 1;
+							for (int j = 1; j < num.length() - 1; j++) {
+								numerateur += num.charAt(j);
+
+							}
+							String freqmot = numerateur + "/" + Nbligne;
+							motifs += "frequence : " + freqmot + ";";
+							System.out.println(freqmot);
+							
+						}
+
+					}
+					for (int i = 0; i < taille; i++) {
+						if (mot[i].equals("")
+								|| Integer.parseInt(mot[i]) > 100000)
+							continue;
 						motifs += tabConv.get(Integer.parseInt(mot[i])) + ";";
 					}
-					motifs += "frequence : " + freqmot;
+
 				} catch (java.lang.NullPointerException e) {
 					System.out.println("fin de conversion");
 				}
-
 				bw.write(motifs);
 				bw.newLine();
-				if (!br.readLine().equals(null))
+				if (br.readLine().isEmpty())
 					break;
+
 			}
 
 		} catch (java.lang.NullPointerException ex) {
@@ -88,13 +126,12 @@ public class converter {
 			br.close();
 			bw.close();
 		}
-
-	} // convertToCsv ()
+	}
 
 	public static void main(String[] args) throws IOException {
 		converter conv = new converter();
 		conv.convertToTxt("Tweet_green.csv", "green.trans");
-		// conv.convertToCsv("motinutil.txt", "out.csv");
+		conv.convertToCsv("green.out", "out.csv");
 	}
 
 }
