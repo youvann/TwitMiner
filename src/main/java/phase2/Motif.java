@@ -1,13 +1,13 @@
 package phase2;
 public class Motif {
-	private int freq;
+	private float freq;
 	private String val;
-	private int support;
+	private float support;
 		
-	public int getFreq() {
+	public float getFreq() {
 		return freq;
 	}
-	public void setFreq(int freq) {
+	public void setFreq(float freq) {
 		this.freq = freq;
 	}
 	public String getVal() {
@@ -16,14 +16,11 @@ public class Motif {
 	public void setVal(String val) {
 		this.val = val;
 	}
-	public int getSupport() {
+	public float getSupport() {
 		return support;
 	}
-	public void setSupport(int support) {
+	public void setSupport(float support) {
 		this.support = support;
-	}
-	public Motif(int freq) {
-		this.freq = freq;
 	}
 	public Motif() {
 		// TODO Auto-generated constructor stub
