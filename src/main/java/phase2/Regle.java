@@ -13,11 +13,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Regle {
-	private int minFreq;
-	private int minConf;
+	private float minFreq;
+	private float minConf;
 	private List<Motif> arrayMotifFreq;
 
-	public Regle(int minConf, int minFreq) {
+	public Regle(float minConf, float minFreq) {
 		this.minConf = minConf;
 		this.minFreq = minFreq;
 	}
@@ -37,7 +37,7 @@ public class Regle {
 		// On stocke les objets motifs dans la liste arrayMotifFreq
 		while ((ligneMotif = br.readLine()) != null) {
 			Motif motif = new Motif();
-			// On décompose la ligne du motif dans un tableau
+			// On d≈Ωcompose la ligne du motif dans un tableau
 			String[] ligneDecomp = ligneMotif.split(space);
 			// On transforme le tableau en arrayList
 			ArrayList<String> listDecomp = new ArrayList<String>(
@@ -45,19 +45,19 @@ public class Regle {
 
 			for (int i = 0; i < listDecomp.size(); ++i) {
 				String supp = listDecomp.get(i);
-				// On récupére le support
+				// On r≈Ωcup≈Ωre le support
 				Pattern p = Pattern.compile("\\((.*)\\)");
 				Matcher m = p.matcher(supp);
 
 				if (m.find()) {
 					supp = m.group(1);
 					motif.setSupport(Integer.parseInt(supp));
-					// On enlève le dernier élément de l'arraylist (= le
+					// On enl¬ève le dernier ≈Ωl≈Ωment de l'arraylist (= le
 					// support)
 					listDecomp.remove(listDecomp.size() - 1);
 					String mot = "";
 					for (int j = 0; j < listDecomp.size(); ++j) {
-						// On récupère le motif
+						// On r≈Ωcup¬ère le motif
 						mot += listDecomp.get(j) + space;
 					}
 					motif.setVal(mot);					
@@ -70,13 +70,13 @@ public class Regle {
 
 		} // while ()
 		
-		// Calcul du nombre total de transactions présentes dans le fichier
+		// Calcul du nombre total de transactions pr≈Ωsentes dans le fichier
 		int nbrLignes = 0;
 		for(int i = 1; i < arrayMotifFreq.size(); ++i){
 			++nbrLignes;
 		}
 		
-		// Ajout des fréquences pour chaque motifs
+		// Ajout des fr≈Ωquences pour chaque motifs
 		for(int i = 0; i < arrayMotifFreq.size(); ++i){
 			float support = arrayMotifFreq.get(i).getSupport();
 			float freq = (support/nbrLignes);
@@ -102,7 +102,7 @@ public class Regle {
 			float freqY =  arrayMotifFreq.get(i).getFreq();
 			String motif = arrayMotifFreq.get(i).getVal();
 			
-			// On décompose le motif global pour l'insérer dans un arrayList (motifGlobal)
+			// On d≈Ωcompose le motif global pour l'ins≈Ωrer dans un arrayList (motifGlobal)
 			// afin de comparer la liste motifGlobal et substr_Motif
 			// pour savoir si le motif globale contient ou non le sous motif
 			String [] motifDecompo = motif.split(space);
@@ -110,48 +110,61 @@ public class Regle {
 				motifGlobal.add(Integer.parseInt(motifDecompo[k]));
 			}
 			
-			System.out.print("\nMOTIF:" + motif + "array:" + motifGlobal);
+			//System.out.print("\nMOTIF:" + motif + "array:" + motifGlobal);
 						
 			for(int j = 0; i > j; ++j){
 				float freqX = arrayMotifFreq.get(j).getFreq();
 				float confiance = freqY/freqX;
+				//System.out.println(confiance);
 				String sousMotif = arrayMotifFreq.get(j).getVal();
 				if(sousMotif.length() == 0) continue;
 				
-				// Sous motif décomposé dans une arraylist
+				// Sous motif d≈Ωcompos≈Ω dans une arraylist
 				String [] sousMotifDecompo = sousMotif.split(space);	
 				for(int l=0; l < sousMotifDecompo.length; ++l){								
 					//System.out.println("substr :" + sousMotifDecompo[l] + "taille:" + sousMotifDecompo.length);
 					substr_Motif.add(Integer.parseInt(sousMotifDecompo[l]));
 				}
-				System.out.print("\nSous-motif:" + sousMotif + "substr" + substr_Motif);	
+				//System.out.print("\nSous-motif:" + sousMotif + "substr" + substr_Motif);	
 				
-				if (motifGlobal.containsAll(substr_Motif)){
-					System.out.print("ok");
+				if (motifGlobal.containsAll(substr_Motif) && (confiance > minConf)){
+					//System.out.print("ok");
 					String opGauche = "";
 					String opDroite = "";
 					
 					opGauche += substr_Motif.get(0);
 					for (int n = 1; n < substr_Motif.size(); ++n){
-						opGauche += "," + substr_Motif.get(n);
-					}
+						opGauche += "-" + substr_Motif.get(n);
+					}					
+							
 					opDroite += motifGlobal.get(0);
 					for (int n = 1; n < motifGlobal.size(); ++n){
-						opDroite += "," + motifGlobal.get(n);
+						opDroite += "-" + motifGlobal.get(n);
 					}
-					/*
-					// X -> Y-X, suppresion du sous ensemble X de la cible
-					for(int a = 0; a < substr_Motif.size() ; ++a){
-						int attrX = substr_Motif.get(a);
-						for(int b = 0; b < motifGlobal.size(); ++b){
-							if(motifGlobal.get(b).equals(attrX))
-								motifGlobal.remove(b);
+					
+					// X -> Y-X, on supprimer l'attribut X dans la cible
+					String opGaucheTab [] = opGauche.split("-"); 					
+					String opD = "";					
+					String opDroiteTab [] = opDroite.split("-"); 
+					// On transforme le tableau en arrayList
+					ArrayList<String> ListDroit = new ArrayList<String>(
+							Arrays.asList(opDroiteTab));
+					
+					for(int v = 0; v < ListDroit.size(); ++v){
+						for(int w=0; w < opGaucheTab.length; ++w){
+							if(opGaucheTab[w].equals(ListDroit.get(v)))
+								ListDroit.remove(v);
 						}
-					}*/
+					}
+					
+					// re-g≈Ωn≈Ωration de l'op≈Ωrande droite
+					for (int n = 0; n < ListDroit.size(); ++n){
+						opD += ListDroit.get(n) + "-";
+					}					
 					
 					String DF = "";
-					DF = opGauche + "=>" + opDroite;
-					// On ajoute les DF à l'array List
+					DF = opGauche + "=>" + opD;
+					// On ajoute les DF ÀÜ l'array List
 					regleDF.add(DF);
 					
 					//System.out.println(DF);
@@ -161,12 +174,13 @@ public class Regle {
 			motifGlobal.clear();
 			
 		} // for()
-		System.out.println(regleDF);
+		System.out.println("\n" + regleDF);
 	} // Extraction ()
 
 	public static void main(String[] args) throws IOException {
-		Regle ER = new Regle(1, 1);
-		ER.Extraction("green_test.out");
+		float minconf = (float) 0.7;
+		Regle ER = new Regle(minconf, 1);
+		ER.Extraction("green.out");
 
 	} // main ()
 
