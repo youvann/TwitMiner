@@ -1,7 +1,4 @@
 package phase2;
-
-import java.util.List;
-
 public class Motif {
 	private int freq;
 	private String val;
