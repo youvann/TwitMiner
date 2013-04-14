@@ -80,8 +80,10 @@ public class converter {
 			}
 			System.out.println(Nbligne);
 			while (true) {
-
+				
 				String ligne = br.readLine();
+				if (ligne.equals(null))
+					break;
 				String delim = " ";
 				String motifs = "";
 				try {
@@ -117,8 +119,7 @@ public class converter {
 				}
 				bw.write(motifs);
 				bw.newLine();
-				if (br.readLine().isEmpty())
-					break;
+				
 
 			}
 
@@ -130,11 +131,67 @@ public class converter {
 		}
 	}
 
+	
+	public void DFintToDf(String dfint, String df) throws IOException {
+		FileReader fr = new FileReader(dfint);
+		BufferedReader br = new BufferedReader(fr);
+		BufferedWriter bw = new BufferedWriter(new FileWriter(df, true));
+		
+			while (true) {
+				
+				String ligne = br.readLine();
+				try {
+					if (ligne.equals(null))
+					break;
+				} catch (Exception e) {
+					System.out.println("fini");
+				}
+				
+				String delim = "=>";
+				String motifs = "";
+				try {
+					String[] mot = ligne.split(delim);
+
+					int taille = mot.length;
+					String num = "";
+					for (int i = 0; i < taille; i++) {
+						
+						String delim2= "-";
+						String [] sousmot =mot[i].split(delim2);
+						for (int j = 0; j < sousmot.length; j++) {
+							if (sousmot[j].contains("conf"))
+							{
+							
+								 motifs+= sousmot[j];
+								 continue;
+							}
+							motifs += tabConv.get(Integer.parseInt(sousmot[j])) + ";";
+						}
+						
+						motifs+="=>";
+					}
+
+				} catch (java.lang.NullPointerException e) {
+					System.out.println("fin de conversion");
+				}
+				bw.write(motifs);
+				bw.newLine();
+				
+
+			}
+
+		
+			br.close();
+			bw.close();
+		}
+
+
 	public static void main(String[] args) throws IOException {
 		converter conv = new converter();
 		conv.convertToTxt("Tweet_green.csv", "trans");
 		conv.convertToCsv("green.out", "out.csv");
 		//conv.convertToCsv("trans", "out.csv");
+		conv.DFintToDf("DF_int", "df");
 	}
 
 }
