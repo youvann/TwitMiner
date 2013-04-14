@@ -130,15 +130,18 @@ public class Regle {
 					System.out.print("ok\n");
 					String opGauche = "";
 					String opDroite = "";
-					for (int n = 0; n < substr_Motif.size(); ++n){
-						opGauche += substr_Motif.get(n) + ",";
+					
+					opGauche += substr_Motif.get(0);
+					for (int n = 1; n < substr_Motif.size(); ++n){
+						opGauche += "," + substr_Motif.get(n);
 					}
-					for (int n = 0; n < motifGlobal.size(); ++n){
-						opDroite += motifGlobal.get(n) + ",";
+					opDroite += motifGlobal.get(0);
+					for (int n = 1; n < motifGlobal.size(); ++n){
+						opDroite += "," + motifGlobal.get(n);
 					}
 					
 					String DF = "";
-					DF = opGauche + "=>" + opDroite;
+					DF = opGauche + " => " + opDroite;
 					System.out.println(DF);
 				}
 				else
