@@ -26,6 +26,7 @@ public class Regle {
 		// lecture du fichier green.out
 		String fichier = ficOut;
 		List<Motif> arrayMotifFreq = new ArrayList<Motif>();
+		List<String> regleDF = new ArrayList<String>();
 		InputStream ips = new FileInputStream(fichier);
 		InputStreamReader ipsr = new InputStreamReader(ips);
 		BufferedReader br = new BufferedReader(ipsr);
@@ -116,17 +117,38 @@ public class Regle {
 				float confiance = freqY/freqX;
 				String sousMotif = arrayMotifFreq.get(j).getVal();
 				if(sousMotif.length() == 0) continue;
+				
+				// Sous motif décomposé dans une arraylist
 				String [] sousMotifDecompo = sousMotif.split(space);	
 				for(int l=0; l < sousMotifDecompo.length; ++l){								
 					//System.out.println("substr :" + sousMotifDecompo[l] + "taille:" + sousMotifDecompo.length);
 					substr_Motif.add(Integer.parseInt(sousMotifDecompo[l]));
 				}
-				System.out.print("Sous-motif:" + sousMotif + "substr" + substr_Motif  + "\n");	
+				System.out.print("Sous-motif:" + sousMotif + "substr" + substr_Motif);	
+				
+				if (motifGlobal.containsAll(substr_Motif)){
+					System.out.print("ok\n");
+					String opGauche = "";
+					String opDroite = "";
+					for (int n = 0; n < substr_Motif.size(); ++n){
+						opGauche += substr_Motif.get(n) + ",";
+					}
+					for (int n = 0; n < motifGlobal.size(); ++n){
+						opDroite += motifGlobal.get(n) + ",";
+					}
+					
+					String DF = "";
+					DF = opGauche + "=>" + opDroite;
+					System.out.println(DF);
+				}
+				else
+					System.out.println("pas ok\n");
+				
 				substr_Motif.clear();
 			}
 			motifGlobal.clear();
 			
-		}
+		} // for()
 		
 	} // Extraction ()
 
