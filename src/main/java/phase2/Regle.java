@@ -110,7 +110,7 @@ public class Regle {
 				motifGlobal.add(Integer.parseInt(motifDecompo[k]));
 			}
 			
-			System.out.print("MOTIF:" + motif + "array:" + motifGlobal + "\n");
+			System.out.print("\nMOTIF:" + motif + "array:" + motifGlobal);
 						
 			for(int j = 0; i > j; ++j){
 				float freqX = arrayMotifFreq.get(j).getFreq();
@@ -124,10 +124,10 @@ public class Regle {
 					//System.out.println("substr :" + sousMotifDecompo[l] + "taille:" + sousMotifDecompo.length);
 					substr_Motif.add(Integer.parseInt(sousMotifDecompo[l]));
 				}
-				System.out.print("Sous-motif:" + sousMotif + "substr" + substr_Motif);	
+				System.out.print("\nSous-motif:" + sousMotif + "substr" + substr_Motif);	
 				
 				if (motifGlobal.containsAll(substr_Motif)){
-					System.out.print("ok\n");
+					System.out.print("ok");
 					String opGauche = "";
 					String opDroite = "";
 					
@@ -139,20 +139,29 @@ public class Regle {
 					for (int n = 1; n < motifGlobal.size(); ++n){
 						opDroite += "," + motifGlobal.get(n);
 					}
+					/*
+					// X -> Y-X, suppresion du sous ensemble X de la cible
+					for(int a = 0; a < substr_Motif.size() ; ++a){
+						int attrX = substr_Motif.get(a);
+						for(int b = 0; b < motifGlobal.size(); ++b){
+							if(motifGlobal.get(b).equals(attrX))
+								motifGlobal.remove(b);
+						}
+					}*/
 					
 					String DF = "";
-					DF = opGauche + " => " + opDroite;
-					System.out.println(DF);
-				}
-				else
-					System.out.println("pas ok\n");
-				
+					DF = opGauche + "=>" + opDroite;
+					// On ajoute les DF ˆ l'array List
+					regleDF.add(DF);
+					
+					//System.out.println(DF);
+				}				
 				substr_Motif.clear();
 			}
 			motifGlobal.clear();
 			
 		} // for()
-		
+		System.out.println(regleDF);
 	} // Extraction ()
 
 	public static void main(String[] args) throws IOException {
