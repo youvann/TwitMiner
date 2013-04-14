@@ -18,8 +18,10 @@ public class converter {
 		BufferedReader br = new BufferedReader(fr);
 		BufferedWriter bw = new BufferedWriter(new FileWriter(txt, true));
 		try {
-			while (!br.readLine().equals(null)) {
+			while (true) {
 				String ligne = br.readLine();
+				if(ligne.equals(null))
+					break;
 				String delim = ";";
 				String motifs = "";
 				try {
@@ -130,8 +132,9 @@ public class converter {
 
 	public static void main(String[] args) throws IOException {
 		converter conv = new converter();
-		conv.convertToTxt("Tweet_green.csv", "green.trans");
+		conv.convertToTxt("Tweet_green.csv", "trans");
 		conv.convertToCsv("green.out", "out.csv");
+		//conv.convertToCsv("trans", "out.csv");
 	}
 
 }
