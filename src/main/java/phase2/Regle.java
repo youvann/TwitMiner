@@ -25,7 +25,6 @@ public class Regle {
 	public void Extraction(String ficOut) throws IOException {
 		// lecture du fichier green.out
 		String fichier = ficOut;
-		String hyphen = "-";
 		List<Motif> arrayMotifFreq = new ArrayList<Motif>();
 		InputStream ips = new FileInputStream(fichier);
 		InputStreamReader ipsr = new InputStreamReader(ips);
@@ -58,7 +57,7 @@ public class Regle {
 					String mot = "";
 					for (int j = 0; j < listDecomp.size(); ++j) {
 						// On récupère le motif
-						mot += listDecomp.get(j) + hyphen;
+						mot += listDecomp.get(j) + space;
 					}
 					motif.setVal(mot);					
 					// ajoute objet motif dans l'arrayList
@@ -75,39 +74,58 @@ public class Regle {
 		for(int i = 1; i < arrayMotifFreq.size(); ++i){
 			++nbrLignes;
 		}
-		System.out.println("Nbr lignes:" + nbrLignes);
 		
 		// Ajout des fréquences pour chaque motifs
 		for(int i = 0; i < arrayMotifFreq.size(); ++i){
 			float support = arrayMotifFreq.get(i).getSupport();
-			//System.out.println(support);
 			float freq = (support/nbrLignes);
-			//System.out.println(freq);
 			arrayMotifFreq.get(i).setFreq(freq);
 		}
-		
 		br.close();
-		//System.out.println(arrayMotifFreq);
+		
 
 		// Recherche de l'indice du premier motif dont le nombre d'attribut est > 1
 		int posMotif = 0;
 		for(int i = 0; i < arrayMotifFreq.size(); ++i) {
-			String[] motSplit = arrayMotifFreq.get(i).getVal().split(hyphen);
+			String[] motSplit = arrayMotifFreq.get(i).getVal().split(space);
 			if (motSplit.length > 1) {
 				posMotif = i;
 				break;
 			}
 		}
-		System.out.println("Postion:" + posMotif);
+		//System.out.println("Postion:" + posMotif);
 		
+		List<Integer> motifGlobal = new ArrayList<Integer>();
+		List<Integer> substr_Motif = new ArrayList<Integer>();
 		for (int i = posMotif; i <arrayMotifFreq.size(); ++i){
+			float freqY =  arrayMotifFreq.get(i).getFreq();
 			String motif = arrayMotifFreq.get(i).getVal();
-			System.out.print("MOTIF:" + motif + "\n");
 			
-			for(int j = 0; i > j; ++j){
-				String sousMotif = arrayMotifFreq.get(j).getVal();
-				System.out.print("Sous-motif:" + sousMotif + "\n");
+			// On décompose le motif global pour l'insérer dans un arrayList (motifGlobal)
+			// afin de comparer la liste motifGlobal et substr_Motif
+			// pour savoir si le motif globale contient ou non le sous motif
+			String [] motifDecompo = motif.split(space);
+			for(int k = 0; k < motifDecompo.length; ++k){
+				motifGlobal.add(Integer.parseInt(motifDecompo[k]));
 			}
+			
+			System.out.print("MOTIF:" + motif + "array:" + motifGlobal + "\n");
+						
+			for(int j = 0; i > j; ++j){
+				float freqX = arrayMotifFreq.get(j).getFreq();
+				float confiance = freqY/freqX;
+				String sousMotif = arrayMotifFreq.get(j).getVal();
+				if(sousMotif.length() == 0) continue;
+				String [] sousMotifDecompo = sousMotif.split(space);	
+				for(int l=0; l < sousMotifDecompo.length; ++l){								
+					//System.out.println("substr :" + sousMotifDecompo[l] + "taille:" + sousMotifDecompo.length);
+					substr_Motif.add(Integer.parseInt(sousMotifDecompo[l]));
+				}
+				System.out.print("Sous-motif:" + sousMotif + "substr" + substr_Motif  + "\n");	
+				substr_Motif.clear();
+			}
+			motifGlobal.clear();
+			
 		}
 		
 	} // Extraction ()
