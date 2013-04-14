@@ -1,7 +1,9 @@
 package phase2;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -163,7 +165,7 @@ public class Regle {
 					}					
 					
 					String DF = "";
-					DF = opGauche + "=>" + opD;
+					DF = opGauche + "=>" + opD + "conf:" + confiance;
 					// On ajoute les DF Ë† l'array List
 					regleDF.add(DF);
 					
@@ -175,10 +177,21 @@ public class Regle {
 			
 		} // for()
 		System.out.println("\n" + regleDF);
+		
+		BufferedWriter bw = new BufferedWriter(new FileWriter("DF_int", true));
+		for(int i = 0; i < regleDF.size(); ++i){
+			// Žcriture des DF dans DF_int			
+			String resultat = regleDF.get(i);
+			bw.write(resultat);
+			bw.newLine();
+		}
+		bw.close();
+		
+		
 	} // Extraction ()
 
 	public static void main(String[] args) throws IOException {
-		float minconf = (float) 0.7;
+		float minconf = (float) 0.75;
 		Regle ER = new Regle(minconf, 1);
 		ER.Extraction("green.out");
 
