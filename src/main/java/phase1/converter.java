@@ -8,11 +8,9 @@ import java.io.IOException;
 import java.util.Vector;
 
 public class converter {
-
 	Vector<String> tabConv = new Vector<String>();
 
 	public converter() {
-
 	}
 
 	public void convertToTxt(String csv, String txt) throws IOException {
@@ -27,20 +25,17 @@ public class converter {
 				try {
 					String[] mot = ligne.split(delim);
 					for (int i = 0; i < mot.length; i++) {
-
 						int pos = tabConv.indexOf(mot[i]);
-
 						// mot pas encore dedans
 						if (pos == -1) {
 							pos = tabConv.size();
 							tabConv.add(mot[i]);
 						}
 						motifs += pos + " ";
-			}
+					}
 				} catch (java.lang.NullPointerException e) {
 					System.out.println("fin de conversion");
 				}
-
 
 				bw.write(motifs);
 				bw.newLine();
@@ -52,7 +47,7 @@ public class converter {
 			bw.close();
 		}
 
-	}
+	} // convertToTxt
 
 	public void convertToCsv(String txt, String csv) throws IOException {
 		FileReader fr = new FileReader(txt);
@@ -75,12 +70,11 @@ public class converter {
 					for (int i = 0; i < mot.length - 1; i++) {
 
 						motifs += tabConv.get(Integer.parseInt(mot[i])) + ";";
-			}
+					}
 					motifs += "frequence : " + freqmot;
 				} catch (java.lang.NullPointerException e) {
 					System.out.println("fin de conversion");
 				}
-
 
 				bw.write(motifs);
 				bw.newLine();
@@ -94,11 +88,11 @@ public class converter {
 			br.close();
 			bw.close();
 		}
-	}
+
+	} // convertToCsv ()
 
 	public static void main(String[] args) throws IOException {
 		converter conv = new converter();
-
 		conv.convertToTxt("Tweet_green.csv", "green.trans");
 		// conv.convertToCsv("motinutil.txt", "out.csv");
 	}
