@@ -1,2 +1,1 @@
-Data mining project
-IUT Aix-en-Provence
+Data mining project, IUT Aix-en-Provence.
