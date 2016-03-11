@@ -1,1 +1,2 @@
-Projet BDA twitminer iut aix en provence département informatique
+Data mining project
+IUT Aix-en-Provence
